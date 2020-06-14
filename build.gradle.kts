@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation("com.github.ajalt:clikt:2.7.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.0-M1")
 }
