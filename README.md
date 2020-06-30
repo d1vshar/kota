@@ -16,7 +16,7 @@ cd kota
 gradle build
 ```
 
-Two jars will be built in `build/libs/` - `kota-x.x.x.jar` and `kota-0.1.0-all.jar` (with dependencies)
+Two jars will be built in `build/libs/` - `kota-x.x.x.jar` and `kota-x.x.x-all.jar` (with dependencies)
 
 ## Usage
 
@@ -28,12 +28,12 @@ All static files that need to be hosted should be in the `public/` sub-folder (r
     |-- public/
     |    |-- index.html
     |    |-- subfolders/
-    |-- kota-0.1.0-all.jar
+    |-- kota-x.x.x-all.jar
 ```
 
 To run the jar:
 
-`java -jar build/libs/kota-0.1.0-all.jar --port 8000`
+`java -jar build/libs/kota-x.x.x-all.jar --port 8000`
 
 > You will need JDK 8+
 
