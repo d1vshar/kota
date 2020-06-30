@@ -1,9 +1,12 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     kotlin("jvm") version "1.3.72"
+    id("com.github.johnrengelman.shadow") version "5.2.0"
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group = "io.github.l0llygag.kota"
+version = "0.1.0"
 
 repositories {
     mavenCentral()
@@ -25,5 +28,12 @@ tasks {
     }
     test {
         useJUnitPlatform()
+    }
+    named<ShadowJar>("shadowJar") {
+        archiveBaseName.set("shadow")
+        mergeServiceFiles()
+        manifest {
+            attributes(mapOf("Main-Class" to "io.github.l0llygag.kota.ServerCliKt"))
+        }
     }
 }
