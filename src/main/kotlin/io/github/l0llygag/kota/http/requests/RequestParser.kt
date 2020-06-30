@@ -1,12 +1,12 @@
-package http.requests
+package io.github.l0llygag.kota.http.requests
 
-import enums.HttpHeader
-import enums.HttpMethod
-import enums.HttpStatus
-import enums.HttpVersion
-import http.Headers
-import http.HttpObject
-import http.StatusLine
+import io.github.l0llygag.kota.enums.HttpHeader
+import io.github.l0llygag.kota.enums.HttpMethod
+import io.github.l0llygag.kota.enums.HttpStatus
+import io.github.l0llygag.kota.enums.HttpVersion
+import io.github.l0llygag.kota.http.Headers
+import io.github.l0llygag.kota.http.HttpObject
+import io.github.l0llygag.kota.http.StatusLine
 import java.nio.file.Path
 import java.util.*
 

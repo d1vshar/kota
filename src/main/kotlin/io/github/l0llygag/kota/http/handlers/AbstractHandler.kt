@@ -1,6 +1,6 @@
-package http.handlers
+package io.github.l0llygag.kota.http.handlers
 
-import http.HttpObject
+import io.github.l0llygag.kota.http.HttpObject
 
 abstract class AbstractHandler {
     var error = false

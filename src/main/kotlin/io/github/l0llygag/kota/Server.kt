@@ -1,4 +1,6 @@
-import http.ServerChild
+package io.github.l0llygag.kota
+
+import io.github.l0llygag.kota.http.ServerChild
 import java.net.ServerSocket
 import kotlin.concurrent.thread
 

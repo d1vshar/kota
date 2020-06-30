@@ -1,11 +1,9 @@
-package http
+package io.github.l0llygag.kota.http
 
-import enums.HttpHeader
-import enums.HttpMethod
-import enums.HttpVersion
-import java.nio.file.Path
+import io.github.l0llygag.kota.enums.HttpHeader
+import io.github.l0llygag.kota.enums.HttpMethod
+import io.github.l0llygag.kota.enums.HttpVersion
 import java.util.*
-import kotlin.collections.HashMap
 
 data class Headers(val map: EnumMap<HttpHeader, String>) {
     fun appendToHeader(key: HttpHeader, value: String) {

@@ -1,9 +1,9 @@
-package http.handlers
+package io.github.l0llygag.kota.http.handlers
 
-import enums.HttpMethod
-import enums.HttpStatus
-import enums.HttpVersion
-import http.HttpObject
+import io.github.l0llygag.kota.enums.HttpMethod
+import io.github.l0llygag.kota.enums.HttpStatus
+import io.github.l0llygag.kota.enums.HttpVersion
+import io.github.l0llygag.kota.http.HttpObject
 
 class HttpVersionHandler : AbstractHandler() {
     override fun handle(httpObject: HttpObject): HttpObject {

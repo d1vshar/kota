@@ -1,12 +1,12 @@
-package http
+package io.github.l0llygag.kota.http
 
-import enums.HttpStatus
-import http.handlers.AbstractHandler
-import http.handlers.ContentHandler
-import http.handlers.HttpMethodHandler
-import http.handlers.HttpVersionHandler
-import http.requests.RequestParser
-import http.response.ResponseWriter
+import io.github.l0llygag.kota.enums.HttpStatus
+import io.github.l0llygag.kota.http.handlers.AbstractHandler
+import io.github.l0llygag.kota.http.handlers.ContentHandler
+import io.github.l0llygag.kota.http.handlers.HttpMethodHandler
+import io.github.l0llygag.kota.http.handlers.HttpVersionHandler
+import io.github.l0llygag.kota.http.requests.RequestParser
+import io.github.l0llygag.kota.http.response.ResponseWriter
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStream

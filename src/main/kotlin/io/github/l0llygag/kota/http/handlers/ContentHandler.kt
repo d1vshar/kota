@@ -1,10 +1,9 @@
-package http.handlers
+package io.github.l0llygag.kota.http.handlers
 
-import enums.HttpHeader
-import enums.HttpStatus
-import enums.MimeType
-import http.HttpObject
-import java.io.File
+import io.github.l0llygag.kota.enums.HttpHeader
+import io.github.l0llygag.kota.enums.HttpStatus
+import io.github.l0llygag.kota.enums.MimeType
+import io.github.l0llygag.kota.http.HttpObject
 import java.nio.file.Path
 
 class ContentHandler : AbstractHandler() {

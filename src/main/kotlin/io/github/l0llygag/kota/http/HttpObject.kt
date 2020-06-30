@@ -1,12 +1,9 @@
-package http
+package io.github.l0llygag.kota.http
 
-import enums.HttpMethod
-import enums.HttpStatus
-import enums.HttpVersion
-import http.Headers
-import http.StatusLine
+import io.github.l0llygag.kota.enums.HttpMethod
+import io.github.l0llygag.kota.enums.HttpStatus
+import io.github.l0llygag.kota.enums.HttpVersion
 import java.io.FileInputStream
-import java.io.InputStreamReader
 import java.nio.file.Path
 
 data class HttpObject(

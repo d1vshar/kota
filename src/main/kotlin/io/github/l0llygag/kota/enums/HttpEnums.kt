@@ -1,6 +1,4 @@
-package enums
-
-import java.nio.charset.Charset
+package io.github.l0llygag.kota.enums
 
 enum class HttpHeader(val headersKeys: String) {
     ACCEPT("Accept"),
@@ -21,7 +19,7 @@ enum class HttpStatus(val code: Int, val description: String) {
     NOT_FOUND(404,	"Not Found"),
     METHOD_NOT_ALLOWED(405,	"Method Not Allowed"),
     URI_TOO_LONG(414,	"URI Too Long"),
-    INTERNAL_SERVER_ERROR(500,	"Internal Server Error"),
+    INTERNAL_SERVER_ERROR(500,	"Internal io.github.l0llygag.kota.Server Error"),
     NOT_IMPLEMENTED(501,	"Not Implemented"),
     HTTP_VERSION_NOT_SUPPORTED(505,	"HTTP Version Not Supported"),
     UNDECIDED(-1,"Request Not Validated")

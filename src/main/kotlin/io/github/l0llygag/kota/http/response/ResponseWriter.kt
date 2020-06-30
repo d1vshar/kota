@@ -1,7 +1,7 @@
-package http.response
+package io.github.l0llygag.kota.http.response
 
-import enums.HttpVersion
-import http.HttpObject
+import io.github.l0llygag.kota.enums.HttpVersion
+import io.github.l0llygag.kota.http.HttpObject
 import java.io.OutputStream
 
 class ResponseWriter(private val writer: OutputStream, private val httpObject: HttpObject) {
