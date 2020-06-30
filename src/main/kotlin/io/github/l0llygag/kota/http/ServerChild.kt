@@ -62,6 +62,9 @@ class ServerChild(private val clientSocket: Socket): Runnable {
 
             request = ""
             if (Instant.now().minusSeconds(30) >= startTime) {
+                logger.info {
+                    "timeout on ${clientSocket.inetAddress.hostAddress}:${clientSocket.port}"
+                }
                 writer.close()
                 clientSocket.close()
                 break@outer
@@ -84,19 +87,18 @@ class ServerChild(private val clientSocket: Socket): Runnable {
         val httpObject = RequestParser(req).getParsedRequest()
 
         logger.info {
-            "request status line for ${clientSocket.inetAddress.hostAddress}:${clientSocket.port} " +
-                "= ${httpObject.statusLine.httpMethod} ${httpObject.statusLine.path} ${httpObject.statusLine.httpVersion.version}"
+            "REQUEST ${clientSocket.inetAddress.hostAddress} ${clientSocket.port} " +
+                "${httpObject.statusLine.httpMethod} ${httpObject.statusLine.path} ${httpObject.statusLine.httpVersion.version}"
         }
 
         val handledHttpObject = executeAllHandlers(httpObject, handlers)
 
         logger.info {
-            "response status line for ${clientSocket.inetAddress.hostAddress}:${clientSocket.port} " +
-                    "= ${handledHttpObject.httpVersion.version} ${handledHttpObject.status.code} ${handledHttpObject.status.description}"
+            "RESPONSE ${clientSocket.inetAddress.hostAddress}:${clientSocket.port} " +
+                    "${handledHttpObject.httpVersion.version} ${handledHttpObject.status.code} ${handledHttpObject.status.description}"
         }
 
         ResponseWriter(writer, handledHttpObject).write()
-        writer.close()
     }
 
     /**
@@ -112,14 +114,14 @@ class ServerChild(private val clientSocket: Socket): Runnable {
 
         for (handler in handlers) {
             logger.trace {
-                "executing handler on ${clientSocket.inetAddress.hostAddress}: ${clientSocket.port}" +
+                "HANDLER ${clientSocket.inetAddress.hostAddress} ${clientSocket.port}" +
                         " = ${handler.javaClass.name}"
             }
             tempHttpObject = handler.handle(tempHttpObject)
 
             if (handler.error) {
-                logger.debug {
-                    "error on ${clientSocket.inetAddress.hostAddress}: ${clientSocket.port} " +
+                logger.info {
+                    "ERROR ${clientSocket.inetAddress.hostAddress} ${clientSocket.port} " +
                         "handler = ${handler.javaClass.name} | httpObject = $tempHttpObject"
                 }
                 break
