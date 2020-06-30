@@ -22,6 +22,9 @@ dependencies {
 }
 
 tasks {
+    build {
+        dependsOn("shadowJar")
+    }
     compileKotlin {
         kotlinOptions.jvmTarget = "1.8"
     }
