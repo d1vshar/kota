@@ -1,12 +1,22 @@
 package http.requests
 
-class RequestParser (req: String) {
+import enums.HttpHeader
+import enums.HttpMethod
+import enums.HttpStatus
+import enums.HttpVersion
+import http.Headers
+import http.HttpObject
+import http.StatusLine
+import java.nio.file.Path
+import java.util.*
+
+class RequestParser(req: String) {
 
     private val lines = req.trim().split("\n")
 
-    private fun getHeaders(): List<Pair<String, String>> {
+    private fun getHeaders(): Headers {
         val regex = "(.*):\\s*(.*)".toRegex()
-        val headers = arrayListOf<Pair<String,String>>()
+        val headers = Headers(EnumMap(HttpHeader::class.java))
 
         for (line in lines) {
             if (line.isEmpty()) break
@@ -14,35 +24,54 @@ class RequestParser (req: String) {
             val matchResult = regex.matchEntire(line)
             matchResult?.let {
                 val groupValues = it.groupValues
-                headers.add(groupValues[1] to groupValues[2])
+
+                HttpHeader.values().find { httpHeader -> httpHeader.headersKeys == groupValues[1] }?.let { findResult ->
+                    headers.appendToHeader(findResult, groupValues[2])
+                }
             }
         }
 
         return headers
     }
 
-    private fun getStatusLine(): ParsedRequestLine {
-        val regex = "(\\w*)\\s(.*)\\s(HTTP/1\\.\\d)".toRegex()
-        val requestLine = ParsedRequestLine("", "", "")
+    private fun getStatusLine(): StatusLine {
+        var method = ""
+        var target = ""
+        var version = ""
+
+        val regex = "(\\w*)\\s(.*)\\s(HTTP/\\d\\.\\d)".toRegex()
 
         if (lines.isNotEmpty()) {
-            println(lines)
             val matchResult = regex.matchEntire(lines.first())
-            println(matchResult?.groupValues)
             matchResult?.let {
-                requestLine.method = it.groupValues[1]
-                requestLine.target = it.groupValues[2]
-                requestLine.version = it.groupValues[3]
+                method = it.groupValues[1]
+                target = it.groupValues[2]
+                version = it.groupValues[3]
             }
         }
 
-        return requestLine
+        // method validation
+        val httpMethod = HttpMethod.values().find { it.name == method.trim() } ?: HttpMethod.UNKNOWN
+
+        // version validation
+        val httpVersion = HttpVersion.values().find { it.version == version.trim() } ?: HttpVersion.UNKNOWN
+
+        return StatusLine(httpMethod, target, httpVersion)
     }
 
-    fun getParsedRequest(): ParsedRequest {
-        return ParsedRequest(getStatusLine(), getHeaders())
+    fun getParsedRequest(): HttpObject {
+        val statusLine = getStatusLine()
+        val headers = getHeaders()
+
+        return HttpObject(
+            statusLine = statusLine,
+            httpMethod = HttpMethod.GET,
+            httpVersion = HttpVersion.HTTP_1_1,
+            path = statusLine.path,
+            fileSystemPath = Path.of(statusLine.path),
+            headersIn = headers,
+            headersOut = Headers(EnumMap(HttpHeader::class.java)),
+            status = HttpStatus.UNDECIDED
+        )
     }
 }
-
-data class ParsedRequest(var requestLine: ParsedRequestLine, var header: List<Pair<String,String>>)
-data class ParsedRequestLine(var method: String, var target: String, var version: String)
