@@ -1,19 +1,29 @@
 package io.github.l0llygag.kota.http.requests
 
-import io.github.l0llygag.kota.enums.HttpHeader
-import io.github.l0llygag.kota.enums.HttpMethod
-import io.github.l0llygag.kota.enums.HttpStatus
-import io.github.l0llygag.kota.enums.HttpVersion
 import io.github.l0llygag.kota.http.Headers
 import io.github.l0llygag.kota.http.HttpObject
 import io.github.l0llygag.kota.http.StatusLine
+import io.github.l0llygag.kota.http.enums.HttpHeader
+import io.github.l0llygag.kota.http.enums.HttpMethod
+import io.github.l0llygag.kota.http.enums.HttpStatus
+import io.github.l0llygag.kota.http.enums.HttpVersion
 import java.nio.file.Path
 import java.util.*
 
+/**
+ * This class is used to form the [io.github.l0llygag.kota.http.HttpObject] from raw string request.
+ *
+ * @param req The string req received from client.
+ */
 class RequestParser(req: String) {
 
     private val lines = req.trim().split("\n")
 
+    /**
+     * Gets headers by matching against regex.
+     *
+     * @return [io.github.l0llygag.kota.http.Headers] object.
+     */
     private fun getHeaders(): Headers {
         val regex = "(.*):\\s*(.*)".toRegex()
         val headers = Headers(EnumMap(HttpHeader::class.java))
@@ -34,6 +44,11 @@ class RequestParser(req: String) {
         return headers
     }
 
+    /**
+     * Gets status line by matching first line of request against regex.
+     *
+     * @return [io.github.l0llygag.kota.http.StatusLine] object.
+     */
     private fun getStatusLine(): StatusLine {
         var method = ""
         var target = ""
@@ -59,13 +74,17 @@ class RequestParser(req: String) {
         return StatusLine(httpMethod, target, httpVersion)
     }
 
+    /**
+     * Executed the parser.
+     *
+     * @return [io.github.l0llygag.kota.http.HttpObject] which will be passed to handlers.
+     */
     fun getParsedRequest(): HttpObject {
         val statusLine = getStatusLine()
         val headers = getHeaders()
 
         return HttpObject(
             statusLine = statusLine,
-            httpMethod = HttpMethod.GET,
             httpVersion = HttpVersion.HTTP_1_1,
             path = statusLine.path,
             fileSystemPath = Path.of(statusLine.path),

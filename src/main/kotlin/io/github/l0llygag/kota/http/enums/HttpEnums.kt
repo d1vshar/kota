@@ -1,5 +1,10 @@
-package io.github.l0llygag.kota.enums
+package io.github.l0llygag.kota.http.enums
 
+/**
+ * Enum for different HTTP headers.
+ *
+ * @param headersKeys string of the header in camel case.
+ */
 enum class HttpHeader(val headersKeys: String) {
     ACCEPT("Accept"),
     ACCEPT_CHARSET("Accept-Charset"),
@@ -8,6 +13,12 @@ enum class HttpHeader(val headersKeys: String) {
     CONTENT_TYPE("Content-Type")
 }
 
+/**
+ * Enum for different HTTP status codes.
+ *
+ * @param code The HTTP status code.
+ * @param description Description of the code.
+ */
 enum class HttpStatus(val code: Int, val description: String) {
     CONTINUE(100,	"Continue"),
     OK(200,	"OK"),
@@ -25,16 +36,31 @@ enum class HttpStatus(val code: Int, val description: String) {
     UNDECIDED(-1,"Request Not Validated")
 }
 
+/**
+ * Enum for different HTTP versions.
+ *
+ * @param version string value of the version
+ */
 enum class HttpVersion(val version: String) {
     HTTP_1_1("HTTP/1.1"),
     UNKNOWN("null")
 }
 
+/**
+ * Enum for different HTTP status codes.
+ */
 enum class HttpMethod {
     GET,
     UNKNOWN
 }
 
+/**
+ * Enum for different mime-types for [io.github.l0llygag.kota.http.enums.HttpHeader.CONTENT_TYPE] header.
+ *
+ * @param ext File extension to be matched for the mime-type.
+ * @param mime The mime-type string value.
+ * @param charset Charset to appended to header for the mime-type. `null` is exception for no charset required.
+ */
 enum class MimeType(val ext: String, val mime: String, val charset: String) {
     AAC(".aac", "audio/aac","null"),
     ABW(".abw", "application/x-abiword","null"),

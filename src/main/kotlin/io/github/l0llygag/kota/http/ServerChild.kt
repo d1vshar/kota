@@ -1,6 +1,6 @@
 package io.github.l0llygag.kota.http
 
-import io.github.l0llygag.kota.enums.HttpStatus
+import io.github.l0llygag.kota.http.enums.HttpStatus
 import io.github.l0llygag.kota.http.handlers.AbstractHandler
 import io.github.l0llygag.kota.http.handlers.ContentHandler
 import io.github.l0llygag.kota.http.handlers.HttpMethodHandler
@@ -14,10 +14,21 @@ import java.io.OutputStream
 import java.net.Socket
 import java.time.Instant
 
+
+/**
+ * Every new connection is handed over to it's own `ServerChild` running in a new thread. Receiving requests, responding
+ * and closing the connection is this class's responsibility.
+ *
+ * @param clientSocket The socket of the client which is connected.
+ */
 class ServerChild(private val clientSocket: Socket): Runnable {
 
     private val logger = KotlinLogging.logger {  }
 
+    /**
+     * Runs the runnable. Reads the request and responds using [io.github.l0llygag.kota.http.ServerChild.respond] function.
+     * Also closes the connection after 30s timeout.
+     */
     override fun run() {
         logger.info { "handling request from ${clientSocket.inetAddress.hostAddress}:${clientSocket.port}" }
 
@@ -59,6 +70,13 @@ class ServerChild(private val clientSocket: Socket): Runnable {
 
     }
 
+    /**
+     * Forms the response to be sent to client. Request is parsed using [io.github.l0llygag.kota.http.requests.RequestParser].
+     * Response is written using [io.github.l0llygag.kota.http.response.ResponseWriter].
+     *
+     * @param req Request from the client.
+     * @param writer OutputStream of the socket which is used to write.
+     */
     private fun respond(req: String, writer: OutputStream) {
         // handlers need to be decided programmatically using strategies depending upon request
         val handlers = arrayOf(HttpVersionHandler(), HttpMethodHandler(), ContentHandler())
@@ -78,8 +96,17 @@ class ServerChild(private val clientSocket: Socket): Runnable {
         }
 
         ResponseWriter(writer, handledHttpObject).write()
+        writer.close()
     }
 
+    /**
+     * Executes [io.github.l0llygag.kota.http.handlers.AbstractHandler] on [io.github.l0llygag.kota.http.HttpObject]
+     * one by one. If any handler returns error, the returned is used to respond to request.
+     *
+     * @param httpObject The parsed object received from [io.github.l0llygag.kota.http.requests.RequestParser] which
+     * will be passed to first handler.
+     * @param handlers Array of handler that need to be executed in order.
+     */
     private fun executeAllHandlers(httpObject: HttpObject, handlers: Array<AbstractHandler>): HttpObject {
         var tempHttpObject = httpObject
 

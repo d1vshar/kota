@@ -1,11 +1,14 @@
 package io.github.l0llygag.kota.http.handlers
 
-import io.github.l0llygag.kota.enums.HttpHeader
-import io.github.l0llygag.kota.enums.HttpStatus
-import io.github.l0llygag.kota.enums.MimeType
 import io.github.l0llygag.kota.http.HttpObject
+import io.github.l0llygag.kota.http.enums.HttpHeader
+import io.github.l0llygag.kota.http.enums.HttpStatus
+import io.github.l0llygag.kota.http.enums.MimeType
 import java.nio.file.Path
 
+/**
+ * Handler for adding content and related headers to the response, or returning error if content not found.
+ */
 class ContentHandler : AbstractHandler() {
 
     override fun handle(httpObject: HttpObject): HttpObject {
@@ -15,7 +18,6 @@ class ContentHandler : AbstractHandler() {
 
         val normalizedPath = normalizePath(httpObject.path)
         val dataFile = normalizedPath.toFile()
-        val dataStream = dataFile.inputStream()
         httpObject.fileSystemPath = normalizedPath
         val notFound = !dataFile.exists()
 
@@ -25,6 +27,7 @@ class ContentHandler : AbstractHandler() {
             return httpObject
         }
 
+        val dataStream = dataFile.inputStream()
         val mimeType = determineMimeType(dataFile.name)
 
         var charset = ""

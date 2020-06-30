@@ -5,12 +5,23 @@ import mu.KotlinLogging
 import java.net.ServerSocket
 import kotlin.concurrent.thread
 
+/**
+ * This class is responsible for listening to new connections and spawning [io.github.l0llygag.kota.http.ServerChild] in
+ * new threads.
+ *
+ * @param port Port at which the server listens for new connections.
+ * @property serverSocket Socket at which the server listens for new connections.
+ * @sample io.github.l0llygag.kota.ServerCli.run
+ */
 class Server(port: Int) {
 
     private val logger = KotlinLogging.logger {  }
 
     private val serverSocket = ServerSocket(port)
 
+    /**
+     * Calling this function actually starts the server.
+     */
     fun listen() {
         logger.info { "server listening on ${serverSocket.inetAddress.hostAddress}:${serverSocket.localPort}" }
         while (true) {
