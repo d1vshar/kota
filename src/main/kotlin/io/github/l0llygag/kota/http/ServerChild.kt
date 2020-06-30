@@ -7,6 +7,7 @@ import io.github.l0llygag.kota.http.handlers.HttpMethodHandler
 import io.github.l0llygag.kota.http.handlers.HttpVersionHandler
 import io.github.l0llygag.kota.http.requests.RequestParser
 import io.github.l0llygag.kota.http.response.ResponseWriter
+import mu.KotlinLogging
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStream
@@ -15,8 +16,11 @@ import java.time.Instant
 
 class ServerChild(private val clientSocket: Socket): Runnable {
 
+    private val logger = KotlinLogging.logger {  }
+
     override fun run() {
-        println("handling request from ${clientSocket.inetAddress.hostAddress}:${clientSocket.port}")
+        logger.info { "handling request from ${clientSocket.inetAddress.hostAddress}:${clientSocket.port}" }
+
         val reader = BufferedReader(InputStreamReader(clientSocket.getInputStream()))
         val writer = clientSocket.getOutputStream()
         val startTime = Instant.now()
@@ -33,8 +37,10 @@ class ServerChild(private val clientSocket: Socket): Runnable {
                     tmpLine = reader.readLine()
 
                     if (tmpLine.isNullOrEmpty()) {
-                        request.trim()
-                        println("request = $request")
+                        request = request.trim()
+                        logger.trace {
+                            "request from ${clientSocket.inetAddress.hostAddress}:${clientSocket.port} = $request"
+                        }
                         respond(request,writer)
                         break@inner
                     }
@@ -51,7 +57,6 @@ class ServerChild(private val clientSocket: Socket): Runnable {
             }
         } while (true)
 
-        println("timeout on ${clientSocket.inetAddress.hostAddress}:${clientSocket.port}")
     }
 
     private fun respond(req: String, writer: OutputStream) {
@@ -59,7 +64,18 @@ class ServerChild(private val clientSocket: Socket): Runnable {
         val handlers = arrayOf(HttpVersionHandler(), HttpMethodHandler(), ContentHandler())
 
         val httpObject = RequestParser(req).getParsedRequest()
+
+        logger.info {
+            "request status line for ${clientSocket.inetAddress.hostAddress}:${clientSocket.port} " +
+                "= ${httpObject.statusLine.httpMethod} ${httpObject.statusLine.path} ${httpObject.statusLine.httpVersion.version}"
+        }
+
         val handledHttpObject = executeAllHandlers(httpObject, handlers)
+
+        logger.info {
+            "response status line for ${clientSocket.inetAddress.hostAddress}:${clientSocket.port} " +
+                    "= ${handledHttpObject.httpVersion.version} ${handledHttpObject.status.code} ${handledHttpObject.status.description}"
+        }
 
         ResponseWriter(writer, handledHttpObject).write()
     }
@@ -68,8 +84,19 @@ class ServerChild(private val clientSocket: Socket): Runnable {
         var tempHttpObject = httpObject
 
         for (handler in handlers) {
+            logger.trace {
+                "executing handler on ${clientSocket.inetAddress.hostAddress}: ${clientSocket.port}" +
+                        " = ${handler.javaClass.name}"
+            }
             tempHttpObject = handler.handle(tempHttpObject)
-            if (handler.error) break
+
+            if (handler.error) {
+                logger.debug {
+                    "error on ${clientSocket.inetAddress.hostAddress}: ${clientSocket.port} " +
+                        "handler = ${handler.javaClass.name} | httpObject = $tempHttpObject"
+                }
+                break
+            }
         }
 
         // If the status is still undecided, it passed through all error checkers

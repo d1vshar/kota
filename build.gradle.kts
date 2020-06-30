@@ -15,6 +15,8 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("com.github.ajalt:clikt:2.7.1")
+    implementation("ch.qos.logback:logback-classic:1.3.0-alpha5")
+    implementation("io.github.microutils:kotlin-logging:1.8.0.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.0-M1")
 }
@@ -30,7 +32,6 @@ tasks {
         useJUnitPlatform()
     }
     named<ShadowJar>("shadowJar") {
-        archiveBaseName.set("shadow")
         mergeServiceFiles()
         manifest {
             attributes(mapOf("Main-Class" to "io.github.l0llygag.kota.ServerCliKt"))
