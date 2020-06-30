@@ -6,8 +6,8 @@ class Server(port: Int) {
     private val serverSocket = ServerSocket(port)
 
     fun listen() {
+        println("Server listening on ${serverSocket.inetAddress.hostAddress}:${serverSocket.localPort}")
         while (true) {
-            println("Server listening on ${serverSocket.inetAddress.hostAddress}:${serverSocket.localPort}")
             val clientSocket = serverSocket.accept()
 
             thread {
