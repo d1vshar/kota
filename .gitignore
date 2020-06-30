@@ -24,7 +24,6 @@ hs_err_pid*
 
 # test files
 public/
-src/main/resources/mimetypes.json
 
 # build files
 build/
