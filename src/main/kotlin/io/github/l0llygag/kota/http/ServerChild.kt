@@ -94,7 +94,7 @@ class ServerChild(private val clientSocket: Socket): Runnable {
         val handledHttpObject = executeAllHandlers(httpObject, handlers)
 
         logger.info {
-            "RESPONSE ${clientSocket.inetAddress.hostAddress}:${clientSocket.port} " +
+            "RESPONSE ${clientSocket.inetAddress.hostAddress} ${clientSocket.port} " +
                     "${handledHttpObject.httpVersion.version} ${handledHttpObject.status.code} ${handledHttpObject.status.description}"
         }
 
