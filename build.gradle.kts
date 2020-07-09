@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.github.l0llygag.kota"
-version = "0.1.1"
+version = "0.1.2"
 
 repositories {
     mavenCentral()
