@@ -20,9 +20,14 @@ Two jars will be built in `build/libs/` - `kota-x.x.x.jar` and `kota-x.x.x-all.j
 
 ## Usage
 
-Currently, the server supports only one configuration option, the port.
+CLI arguments:
 
-All static files that need to be hosted should be in the `public/` sub-folder (relative to the jar)
+Argument Name | CLI Name | Description | Type | Default
+--------------|----------|-------------|------| -------
+Port | --port | Port on which the server will listen for requests. | number | 8080
+Public Folder | --public | Root folder to serve files. Needs to end with '/' | string | public/
+
+All static files that need to be hosted should be in the `Public Folder` provided using CLI argument. (default: `public/`)
 ```
 -- root/
     |-- public/
@@ -33,13 +38,14 @@ All static files that need to be hosted should be in the `public/` sub-folder (r
 
 To run the jar:
 
-`java -jar build/libs/kota-x.x.x-all.jar --port 8000`
+`java -jar build/libs/kota-x.x.x-all.jar --port PORT --public FOLDER/`
 
 > You will need JDK 8+
 
 In case you want to use it as a library, you can include the jar in your class-path and use
 ```kotlin
-Server(port).listen()
+val serverConfiguration = ServerConfiguration(...)
+Server(serverConfiguration).listen()
 ```
 
 ## License
