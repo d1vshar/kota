@@ -1,5 +1,6 @@
 package io.github.l0llygag.kota.http
 
+import io.github.l0llygag.kota.ServerConfiguration
 import io.github.l0llygag.kota.http.enums.HttpStatus
 import io.github.l0llygag.kota.http.handlers.AbstractHandler
 import io.github.l0llygag.kota.http.handlers.ContentHandler
@@ -20,8 +21,12 @@ import java.time.Instant
  * and closing the connection is this class's responsibility.
  *
  * @param clientSocket The socket of the client which is connected.
+ * @param serverConfiguration This data class holds configuration related to server.
  */
-class ServerChild(private val clientSocket: Socket): Runnable {
+class ServerChild(
+    private val clientSocket: Socket,
+    private val serverConfiguration: ServerConfiguration
+): Runnable {
 
     private val logger = KotlinLogging.logger {  }
 
@@ -108,6 +113,7 @@ class ServerChild(private val clientSocket: Socket): Runnable {
      * @param httpObject The parsed object received from [io.github.l0llygag.kota.http.requests.RequestParser] which
      * will be passed to first handler.
      * @param handlers Array of handler that need to be executed in order.
+     * @return [io.github.l0llygag.kota.http.HttpObject] returned by last executed handler.
      */
     private fun executeAllHandlers(httpObject: HttpObject, handlers: Array<AbstractHandler>): HttpObject {
         var tempHttpObject = httpObject
@@ -117,7 +123,7 @@ class ServerChild(private val clientSocket: Socket): Runnable {
                 "HANDLER ${clientSocket.inetAddress.hostAddress} ${clientSocket.port}" +
                         " = ${handler.javaClass.name}"
             }
-            tempHttpObject = handler.handle(tempHttpObject)
+            tempHttpObject = handler.handle(tempHttpObject, serverConfiguration)
 
             if (handler.error) {
                 logger.info {

@@ -1,5 +1,6 @@
 package io.github.l0llygag.kota.http.handlers
 
+import io.github.l0llygag.kota.ServerConfiguration
 import io.github.l0llygag.kota.http.HttpObject
 
 /**
@@ -13,7 +14,10 @@ abstract class AbstractHandler {
 
     /**
      * Function to execute the handler.
+     *
+     * @param httpObject HttpObject to be modified.
+     * @param serverConfiguration Configuration of the server.
      * @return Modified (handled) [io.github.l0llygag.kota.http.HttpObject].
      */
-    abstract fun handle(httpObject: HttpObject): HttpObject
+    abstract fun handle(httpObject: HttpObject, serverConfiguration: ServerConfiguration): HttpObject
 }

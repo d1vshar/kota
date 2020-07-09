@@ -1,5 +1,6 @@
 package io.github.l0llygag.kota.http.handlers
 
+import io.github.l0llygag.kota.ServerConfiguration
 import io.github.l0llygag.kota.http.HttpObject
 import io.github.l0llygag.kota.http.enums.HttpHeader
 import io.github.l0llygag.kota.http.enums.HttpStatus
@@ -11,12 +12,12 @@ import java.nio.file.Path
  */
 class ContentHandler : AbstractHandler() {
 
-    override fun handle(httpObject: HttpObject): HttpObject {
+    override fun handle(httpObject: HttpObject, serverConfiguration: ServerConfiguration): HttpObject {
         // for content negotiation [RFC 2295] and other headers dependent behaviours
         // val headersIn = request.headersIn
         val headersOut = httpObject.headersOut
 
-        val normalizedPath = normalizePath(httpObject.path)
+        val normalizedPath = normalizePath(httpObject.path, serverConfiguration.publicFolder)
         val dataFile = normalizedPath.toFile()
         httpObject.fileSystemPath = normalizedPath
         val notFound = !dataFile.exists()
@@ -43,10 +44,10 @@ class ContentHandler : AbstractHandler() {
         return httpObject
     }
 
-    private fun normalizePath(path: String): Path {
+    private fun normalizePath(path: String, publicFolder: String): Path {
         if (path.endsWith("/"))
-            return Path.of("public", path + "index.html")
-        return Path.of("public", path)
+            return Path.of(publicFolder, path + "index.html")
+        return Path.of(publicFolder, path)
     }
 
     private fun determineMimeType(fileName: String): MimeType {
