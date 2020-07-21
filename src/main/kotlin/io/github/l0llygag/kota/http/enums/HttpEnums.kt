@@ -10,7 +10,8 @@ enum class HttpHeader(val headersKeys: String) {
     ACCEPT_CHARSET("Accept-Charset"),
     ACCEPT_ENCODING("Accept-Encoding"),
     CONTENT_LENGTH("Content-Length"),
-    CONTENT_TYPE("Content-Type")
+    CONTENT_TYPE("Content-Type"),
+    DATE("Date")
 }
 
 /**

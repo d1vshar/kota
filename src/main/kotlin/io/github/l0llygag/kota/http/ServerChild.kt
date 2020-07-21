@@ -2,10 +2,7 @@ package io.github.l0llygag.kota.http
 
 import io.github.l0llygag.kota.ServerConfiguration
 import io.github.l0llygag.kota.http.enums.HttpStatus
-import io.github.l0llygag.kota.http.handlers.AbstractHandler
-import io.github.l0llygag.kota.http.handlers.ContentHandler
-import io.github.l0llygag.kota.http.handlers.HttpMethodHandler
-import io.github.l0llygag.kota.http.handlers.HttpVersionHandler
+import io.github.l0llygag.kota.http.handlers.*
 import io.github.l0llygag.kota.http.requests.RequestParser
 import io.github.l0llygag.kota.http.response.ResponseWriter
 import mu.KotlinLogging
@@ -87,7 +84,7 @@ class ServerChild(
      */
     private fun respond(req: String, writer: OutputStream) {
         // handlers need to be decided programmatically using strategies depending upon request
-        val handlers = arrayOf(HttpVersionHandler(), HttpMethodHandler(), ContentHandler())
+        val handlers = arrayOf(HttpVersionHandler(), HttpMethodHandler(), ContentHandler(), ResponseDateHandler())
 
         val httpObject = RequestParser(req).getParsedRequest()
 
