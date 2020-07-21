@@ -8,7 +8,12 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-
+/**
+ * Handler for adding date header to the response. Format as specified in RFC7231.
+ *
+ * This header should generally be executed at the last of the whole server pipeline
+ * to maintain highest approximation of response creation time.
+ */
 class ResponseDateHandler : AbstractHandler() {
     override fun handle(httpObject: HttpObject, serverConfiguration: ServerConfiguration): HttpObject {
         val str = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)
