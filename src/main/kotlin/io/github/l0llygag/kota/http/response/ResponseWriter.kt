@@ -36,7 +36,7 @@ class ResponseWriter(private val writer: OutputStream, private val httpObject: H
         val metaData = getRequestMeta()
         writer.write(metaData)
 
-        if (httpObject.contentStream != null) {
+        httpObject.contentStream?.let {
             writer.write("\n".toByteArray())
 
             var c = httpObject.contentStream?.read() ?: -1
