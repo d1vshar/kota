@@ -1,10 +1,12 @@
-package io.github.l0llygag.kota
+package io.github.l0llygag.kota.implementations
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.validate
 import com.github.ajalt.clikt.parameters.types.int
+import io.github.l0llygag.kota.core.Server
+import io.github.l0llygag.kota.core.ServerConfiguration
 import java.io.File
 
 fun main(args: Array<String>) {
@@ -13,7 +15,7 @@ fun main(args: Array<String>) {
 
 /**
  * This class is responsible for parsing command-line options using the Clikt library.
- * [io.github.l0llygag.kota.Server] is initialized with the options.
+ * [io.github.l0llygag.kota.core.Server] is initialized with the options.
  *
  * @property port Port at which the server listens for new connections. Provided using --port flag from CLI.
  * @property publicFolder The folder in which public files exist. This acts as root folder for server urls.
@@ -25,10 +27,12 @@ class ServerCli: CliktCommand() {
     }
 
     override fun run() {
-        Server(ServerConfiguration(
+        Server(
+            ServerConfiguration(
                 port,
                 publicFolder
-            )).listen()
+            )
+        ).listen()
     }
 }
 

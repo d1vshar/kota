@@ -1,8 +1,9 @@
-package io.github.l0llygag.kota.http.handlers
+package io.github.l0llygag.kota.implementations
 
-import io.github.l0llygag.kota.ServerConfiguration
-import io.github.l0llygag.kota.http.HttpObject
-import io.github.l0llygag.kota.http.enums.HttpHeader
+import io.github.l0llygag.kota.core.ServerConfiguration
+import io.github.l0llygag.kota.core.HttpObject
+import io.github.l0llygag.kota.core.HttpHeader
+import io.github.l0llygag.kota.core.handlers.AbstractHandler
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

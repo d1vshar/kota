@@ -1,7 +1,7 @@
-package io.github.l0llygag.kota.http.response
+package io.github.l0llygag.kota.core.response
 
-import io.github.l0llygag.kota.http.HttpObject
-import io.github.l0llygag.kota.http.enums.HttpVersion
+import io.github.l0llygag.kota.core.HttpObject
+import io.github.l0llygag.kota.core.HttpVersion
 import java.io.OutputStream
 
 /**
@@ -29,7 +29,7 @@ class ResponseWriter(private val writer: OutputStream, private val httpObject: H
     }
 
     /**
-     * Writes to socket. Writes body only if [io.github.l0llygag.kota.http.HttpObject.contentStream] is not null.
+     * Writes to socket. Writes body only if [io.github.l0llygag.kota.core.HttpObject.contentStream] is not null.
      * If it's null, then either no body or file not found.
      */
     fun write() {

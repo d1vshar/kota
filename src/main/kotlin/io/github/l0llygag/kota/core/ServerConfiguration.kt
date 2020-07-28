@@ -1,4 +1,4 @@
-package io.github.l0llygag.kota
+package io.github.l0llygag.kota.core
 
 /**
  * Data class to store server-related configuration.

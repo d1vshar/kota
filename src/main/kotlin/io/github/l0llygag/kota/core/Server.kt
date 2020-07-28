@@ -1,12 +1,11 @@
-package io.github.l0llygag.kota
+package io.github.l0llygag.kota.core
 
-import io.github.l0llygag.kota.http.ServerChild
 import mu.KotlinLogging
 import java.net.ServerSocket
 import kotlin.concurrent.thread
 
 /**
- * This class is responsible for listening to new connections and spawning [io.github.l0llygag.kota.http.ServerChild] in
+ * This class is responsible for listening to new connections and spawning [io.github.l0llygag.kota.core.ServerChild] in
  * new threads.
  *
  * @param serverConfiguration This data class holds configuration related to server.

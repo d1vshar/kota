@@ -1,10 +1,11 @@
-package io.github.l0llygag.kota.http.handlers
+package io.github.l0llygag.kota.implementations
 
-import io.github.l0llygag.kota.ServerConfiguration
-import io.github.l0llygag.kota.http.HttpObject
-import io.github.l0llygag.kota.http.enums.HttpHeader
-import io.github.l0llygag.kota.http.enums.HttpStatus
-import io.github.l0llygag.kota.http.enums.MimeType
+import io.github.l0llygag.kota.core.ServerConfiguration
+import io.github.l0llygag.kota.core.HttpObject
+import io.github.l0llygag.kota.core.HttpHeader
+import io.github.l0llygag.kota.core.HttpStatus
+import io.github.l0llygag.kota.core.MimeType
+import io.github.l0llygag.kota.core.handlers.AbstractHandler
 import java.nio.file.Path
 
 /**

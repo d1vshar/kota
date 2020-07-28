@@ -1,4 +1,4 @@
-package io.github.l0llygag.kota.http.enums
+package io.github.l0llygag.kota.core
 
 /**
  * Enum for different HTTP headers.
@@ -31,7 +31,7 @@ enum class HttpStatus(val code: Int, val description: String) {
     NOT_FOUND(404,	"Not Found"),
     METHOD_NOT_ALLOWED(405,	"Method Not Allowed"),
     URI_TOO_LONG(414,	"URI Too Long"),
-    INTERNAL_SERVER_ERROR(500,	"Internal io.github.l0llygag.kota.Server Error"),
+    INTERNAL_SERVER_ERROR(500,	"Internal io.github.l0llygag.kota.core.Server Error"),
     NOT_IMPLEMENTED(501,	"Not Implemented"),
     HTTP_VERSION_NOT_SUPPORTED(505,	"HTTP Version Not Supported"),
     UNDECIDED(-1,"Request Not Validated")
@@ -56,7 +56,7 @@ enum class HttpMethod {
 }
 
 /**
- * Enum for different mime-types for [io.github.l0llygag.kota.http.enums.HttpHeader.CONTENT_TYPE] header.
+ * Enum for different mime-types for [io.github.l0llygag.kota.core.HttpHeader.CONTENT_TYPE] header.
  *
  * @param ext File extension to be matched for the mime-type.
  * @param mime The mime-type string value.

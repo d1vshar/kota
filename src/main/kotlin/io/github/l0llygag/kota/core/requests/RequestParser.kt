@@ -1,17 +1,17 @@
-package io.github.l0llygag.kota.http.requests
+package io.github.l0llygag.kota.core.requests
 
-import io.github.l0llygag.kota.http.Headers
-import io.github.l0llygag.kota.http.HttpObject
-import io.github.l0llygag.kota.http.StatusLine
-import io.github.l0llygag.kota.http.enums.HttpHeader
-import io.github.l0llygag.kota.http.enums.HttpMethod
-import io.github.l0llygag.kota.http.enums.HttpStatus
-import io.github.l0llygag.kota.http.enums.HttpVersion
+import io.github.l0llygag.kota.core.Headers
+import io.github.l0llygag.kota.core.HttpObject
+import io.github.l0llygag.kota.core.StatusLine
+import io.github.l0llygag.kota.core.HttpHeader
+import io.github.l0llygag.kota.core.HttpMethod
+import io.github.l0llygag.kota.core.HttpStatus
+import io.github.l0llygag.kota.core.HttpVersion
 import java.nio.file.Path
 import java.util.*
 
 /**
- * This class is used to form the [io.github.l0llygag.kota.http.HttpObject] from raw string request.
+ * This class is used to form the [io.github.l0llygag.kota.core.HttpObject] from raw string request.
  *
  * @param req The string req received from client.
  */
@@ -22,7 +22,7 @@ class RequestParser(req: String) {
     /**
      * Gets headers by matching against regex.
      *
-     * @return [io.github.l0llygag.kota.http.Headers] object.
+     * @return [io.github.l0llygag.kota.core.Headers] object.
      */
     private fun getHeaders(): Headers {
         val regex = "(.*):\\s*(.*)".toRegex()
@@ -47,7 +47,7 @@ class RequestParser(req: String) {
     /**
      * Gets status line by matching first line of request against regex.
      *
-     * @return [io.github.l0llygag.kota.http.StatusLine] object.
+     * @return [io.github.l0llygag.kota.core.StatusLine] object.
      */
     private fun getStatusLine(): StatusLine {
         var method = ""
@@ -77,7 +77,7 @@ class RequestParser(req: String) {
     /**
      * Executed the parser.
      *
-     * @return [io.github.l0llygag.kota.http.HttpObject] which will be passed to handlers.
+     * @return [io.github.l0llygag.kota.core.HttpObject] which will be passed to handlers.
      */
     fun getParsedRequest(): HttpObject {
         val statusLine = getStatusLine()

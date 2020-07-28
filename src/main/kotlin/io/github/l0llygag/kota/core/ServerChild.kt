@@ -1,10 +1,12 @@
-package io.github.l0llygag.kota.http
+package io.github.l0llygag.kota.core
 
-import io.github.l0llygag.kota.ServerConfiguration
-import io.github.l0llygag.kota.http.enums.HttpStatus
-import io.github.l0llygag.kota.http.handlers.*
-import io.github.l0llygag.kota.http.requests.RequestParser
-import io.github.l0llygag.kota.http.response.ResponseWriter
+import io.github.l0llygag.kota.core.handlers.AbstractHandler
+import io.github.l0llygag.kota.core.requests.RequestParser
+import io.github.l0llygag.kota.core.response.ResponseWriter
+import io.github.l0llygag.kota.implementations.ContentHandler
+import io.github.l0llygag.kota.implementations.HttpMethodHandler
+import io.github.l0llygag.kota.implementations.HttpVersionHandler
+import io.github.l0llygag.kota.implementations.ResponseDateHandler
 import mu.KotlinLogging
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -28,7 +30,7 @@ class ServerChild(
     private val logger = KotlinLogging.logger {  }
 
     /**
-     * Runs the runnable. Reads the request and responds using [io.github.l0llygag.kota.http.ServerChild.respond] function.
+     * Runs the runnable. Reads the request and responds using [io.github.l0llygag.kota.core.ServerChild.respond] function.
      * Also closes the connection after 30s timeout.
      */
     override fun run() {
@@ -76,15 +78,19 @@ class ServerChild(
     }
 
     /**
-     * Forms the response to be sent to client. Request is parsed using [io.github.l0llygag.kota.http.requests.RequestParser].
-     * Response is written using [io.github.l0llygag.kota.http.response.ResponseWriter].
+     * Forms the response to be sent to client. Request is parsed using [io.github.l0llygag.kota.core.requests.RequestParser].
+     * Response is written using [io.github.l0llygag.kota.core.response.ResponseWriter].
      *
      * @param req Request from the client.
      * @param writer OutputStream of the socket which is used to write.
      */
     private fun respond(req: String, writer: OutputStream) {
         // handlers need to be decided programmatically using strategies depending upon request
-        val handlers = arrayOf(HttpVersionHandler(), HttpMethodHandler(), ContentHandler(), ResponseDateHandler())
+        val handlers = arrayOf(
+            HttpVersionHandler(),
+            HttpMethodHandler(), ContentHandler(),
+            ResponseDateHandler()
+        )
 
         val httpObject = RequestParser(req).getParsedRequest()
 
@@ -104,13 +110,13 @@ class ServerChild(
     }
 
     /**
-     * Executes [io.github.l0llygag.kota.http.handlers.AbstractHandler] on [io.github.l0llygag.kota.http.HttpObject]
+     * Executes [io.github.l0llygag.kota.core.handlers.AbstractHandler] on [io.github.l0llygag.kota.core.HttpObject]
      * one by one. If any handler returns error, the returned is used to respond to request.
      *
-     * @param httpObject The parsed object received from [io.github.l0llygag.kota.http.requests.RequestParser] which
+     * @param httpObject The parsed object received from [io.github.l0llygag.kota.core.requests.RequestParser] which
      * will be passed to first handler.
      * @param handlers Array of handler that need to be executed in order.
-     * @return [io.github.l0llygag.kota.http.HttpObject] returned by last executed handler.
+     * @return [io.github.l0llygag.kota.core.HttpObject] returned by last executed handler.
      */
     private fun executeAllHandlers(httpObject: HttpObject, handlers: Array<AbstractHandler>): HttpObject {
         var tempHttpObject = httpObject

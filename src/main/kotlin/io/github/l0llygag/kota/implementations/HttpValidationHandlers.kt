@@ -1,10 +1,11 @@
-package io.github.l0llygag.kota.http.handlers
+package io.github.l0llygag.kota.implementations
 
-import io.github.l0llygag.kota.ServerConfiguration
-import io.github.l0llygag.kota.http.HttpObject
-import io.github.l0llygag.kota.http.enums.HttpMethod
-import io.github.l0llygag.kota.http.enums.HttpStatus
-import io.github.l0llygag.kota.http.enums.HttpVersion
+import io.github.l0llygag.kota.core.ServerConfiguration
+import io.github.l0llygag.kota.core.HttpObject
+import io.github.l0llygag.kota.core.HttpMethod
+import io.github.l0llygag.kota.core.HttpStatus
+import io.github.l0llygag.kota.core.HttpVersion
+import io.github.l0llygag.kota.core.handlers.AbstractHandler
 
 /**
  * Handler for checking if HTTP Version is valid/supported.

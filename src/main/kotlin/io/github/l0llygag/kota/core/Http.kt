@@ -1,8 +1,5 @@
-package io.github.l0llygag.kota.http
+package io.github.l0llygag.kota.core
 
-import io.github.l0llygag.kota.http.enums.HttpHeader
-import io.github.l0llygag.kota.http.enums.HttpMethod
-import io.github.l0llygag.kota.http.enums.HttpVersion
 import java.util.*
 
 /**
@@ -15,7 +12,7 @@ data class Headers(val map: EnumMap<HttpHeader, String>) {
     /**
      * Function to append value to a header if it exists in the map, else add it to map.
      *
-     * @param key [io.github.l0llygag.kota.http.enums.HttpHeader] enum key.
+     * @param key [io.github.l0llygag.kota.core.HttpHeader] enum key.
      * @param value String value to be set or appended.
      */
     fun appendToHeader(key: HttpHeader, value: String) {

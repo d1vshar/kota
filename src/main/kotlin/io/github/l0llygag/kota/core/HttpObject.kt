@@ -1,7 +1,5 @@
-package io.github.l0llygag.kota.http
+package io.github.l0llygag.kota.core
 
-import io.github.l0llygag.kota.http.enums.HttpStatus
-import io.github.l0llygag.kota.http.enums.HttpVersion
 import java.io.FileInputStream
 import java.nio.file.Path
 
