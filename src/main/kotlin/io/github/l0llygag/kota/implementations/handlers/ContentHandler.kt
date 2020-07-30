@@ -18,7 +18,8 @@ class ContentHandler : AbstractHandler() {
         // val headersIn = request.headersIn
         val headersOut = httpObject.headersOut
 
-        val normalizedPath = normalizePath(httpObject.path, serverConfiguration.publicFolder)
+        val extractedPath = extractPathString(httpObject.path)
+        val normalizedPath = normalizePath(extractedPath, serverConfiguration.publicFolder)
         val dataFile = normalizedPath.toFile()
         httpObject.fileSystemPath = normalizedPath
         val notFound = !dataFile.exists()
@@ -42,6 +43,12 @@ class ContentHandler : AbstractHandler() {
         httpObject.contentStream = dataStream
 
         return true to httpObject
+    }
+
+    private fun extractPathString(path: String): String {
+        val regex = "[^?]+".toRegex()
+
+        return regex.find(path)?.value ?: path
     }
 
     private fun normalizePath(path: String, publicFolder: String): Path {
