@@ -1,4 +1,4 @@
-package io.github.l0llygag.kota.implementations
+package io.github.l0llygag.kota.implementations.handlers
 
 import io.github.l0llygag.kota.core.ServerConfiguration
 import io.github.l0llygag.kota.core.HttpObject
@@ -16,7 +16,7 @@ import java.util.Locale
  * to maintain highest approximation of response creation time.
  */
 class ResponseDateHandler : AbstractHandler() {
-    override fun handle(httpObject: HttpObject, serverConfiguration: ServerConfiguration): HttpObject {
+    override fun handle(httpObject: HttpObject, serverConfiguration: ServerConfiguration): Pair<Boolean, HttpObject> {
         val str = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)
             .withZone(ZoneId.of("GMT")).format(Instant.now())
 
@@ -25,7 +25,6 @@ class ResponseDateHandler : AbstractHandler() {
         headersOut.appendToHeader(HttpHeader.DATE, str);
         httpObject.headersOut = headersOut
 
-        return httpObject
+        return true to httpObject
     }
-
 }

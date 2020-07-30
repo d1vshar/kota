@@ -3,10 +3,10 @@ package io.github.l0llygag.kota.core
 import io.github.l0llygag.kota.core.handlers.AbstractHandler
 import io.github.l0llygag.kota.core.requests.RequestParser
 import io.github.l0llygag.kota.core.response.ResponseWriter
-import io.github.l0llygag.kota.implementations.ContentHandler
-import io.github.l0llygag.kota.implementations.HttpMethodHandler
-import io.github.l0llygag.kota.implementations.HttpVersionHandler
-import io.github.l0llygag.kota.implementations.ResponseDateHandler
+import io.github.l0llygag.kota.implementations.handlers.ContentHandler
+import io.github.l0llygag.kota.implementations.handlers.HttpMethodHandler
+import io.github.l0llygag.kota.implementations.handlers.HttpVersionHandler
+import io.github.l0llygag.kota.implementations.handlers.ResponseDateHandler
 import mu.KotlinLogging
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -28,6 +28,13 @@ class ServerChild(
 ): Runnable {
 
     private val logger = KotlinLogging.logger {  }
+
+    // handlers need to be decided programmatically using strategies depending upon request
+    private val handlers = arrayOf(
+        HttpVersionHandler(),
+        HttpMethodHandler(), ContentHandler(),
+        ResponseDateHandler()
+    )
 
     /**
      * Runs the runnable. Reads the request and responds using [io.github.l0llygag.kota.core.ServerChild.respond] function.
@@ -85,13 +92,6 @@ class ServerChild(
      * @param writer OutputStream of the socket which is used to write.
      */
     private fun respond(req: String, writer: OutputStream) {
-        // handlers need to be decided programmatically using strategies depending upon request
-        val handlers = arrayOf(
-            HttpVersionHandler(),
-            HttpMethodHandler(), ContentHandler(),
-            ResponseDateHandler()
-        )
-
         val httpObject = RequestParser(req).getParsedRequest()
 
         logger.info {
@@ -126,9 +126,10 @@ class ServerChild(
                 "HANDLER ${clientSocket.inetAddress.hostAddress} ${clientSocket.port}" +
                         " = ${handler.javaClass.name}"
             }
-            tempHttpObject = handler.handle(tempHttpObject, serverConfiguration)
+            val (success, returnedHttpObject) = handler.handle(tempHttpObject, serverConfiguration)
+            tempHttpObject = returnedHttpObject
 
-            if (handler.error) {
+            if (!success) {
                 logger.info {
                     "ERROR ${clientSocket.inetAddress.hostAddress} ${clientSocket.port} " +
                         "handler = ${handler.javaClass.name} | httpObject = $tempHttpObject"

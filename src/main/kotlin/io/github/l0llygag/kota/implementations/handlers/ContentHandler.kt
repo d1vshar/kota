@@ -1,4 +1,4 @@
-package io.github.l0llygag.kota.implementations
+package io.github.l0llygag.kota.implementations.handlers
 
 import io.github.l0llygag.kota.core.ServerConfiguration
 import io.github.l0llygag.kota.core.HttpObject
@@ -13,7 +13,7 @@ import java.nio.file.Path
  */
 class ContentHandler : AbstractHandler() {
 
-    override fun handle(httpObject: HttpObject, serverConfiguration: ServerConfiguration): HttpObject {
+    override fun handle(httpObject: HttpObject, serverConfiguration: ServerConfiguration): Pair<Boolean, HttpObject> {
         // for content negotiation [RFC 2295] and other headers dependent behaviours
         // val headersIn = request.headersIn
         val headersOut = httpObject.headersOut
@@ -24,9 +24,8 @@ class ContentHandler : AbstractHandler() {
         val notFound = !dataFile.exists()
 
         if (notFound) {
-            error = true
             httpObject.status = HttpStatus.NOT_FOUND
-            return httpObject
+            return false to httpObject
         }
 
         val dataStream = dataFile.inputStream()
@@ -42,7 +41,7 @@ class ContentHandler : AbstractHandler() {
         httpObject.headersOut = headersOut
         httpObject.contentStream = dataStream
 
-        return httpObject
+        return true to httpObject
     }
 
     private fun normalizePath(path: String, publicFolder: String): Path {
