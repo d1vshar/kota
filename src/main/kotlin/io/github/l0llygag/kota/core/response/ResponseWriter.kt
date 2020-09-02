@@ -3,6 +3,7 @@ package io.github.l0llygag.kota.core.response
 import io.github.l0llygag.kota.core.HttpObject
 import io.github.l0llygag.kota.core.HttpVersion
 import java.io.OutputStream
+import java.lang.StringBuilder
 
 /**
  * This class is responsible for writing the response to the socket, byte by byte.
@@ -18,14 +19,14 @@ class ResponseWriter(private val writer: OutputStream, private val httpObject: H
      * @return Byte array of the string "meta" of response
      */
     private fun getRequestMeta(): ByteArray {
-        var str = ""
+        val stringBuilder = StringBuilder()
 
-        str += "${HttpVersion.HTTP_1_1.version} ${httpObject.status.code} ${httpObject.status.description}\n"
+        stringBuilder.appendln("${HttpVersion.HTTP_1_1.version} ${httpObject.status.code} ${httpObject.status.description})")
 
         for (header in httpObject.headersOut.map)
-            str += "${header.key.headersKeys}: ${header.value}\n"
+            stringBuilder.appendln("${header.key.headersKeys}: ${header.value}")
 
-        return str.toByteArray()
+        return stringBuilder.toString().toByteArray()
     }
 
     /**
