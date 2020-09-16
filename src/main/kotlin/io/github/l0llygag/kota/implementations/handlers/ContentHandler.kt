@@ -7,6 +7,7 @@ import io.github.l0llygag.kota.core.HttpStatus
 import io.github.l0llygag.kota.core.MimeType
 import io.github.l0llygag.kota.core.handlers.AbstractHandler
 import java.nio.file.Path
+import java.util.function.Predicate
 
 /**
  * Handler for adding content and related headers to the response, or returning error if content not found.
@@ -19,6 +20,13 @@ class ContentHandler : AbstractHandler() {
         val headersOut = httpObject.headersOut
 
         val extractedPath = extractPathString(httpObject.path)
+        val isValid = isLegalPath(extractedPath)
+
+        if (isValid) {
+            httpObject.status = HttpStatus.BAD_REQUEST
+            return false to httpObject
+        }
+
         val normalizedPath = normalizePath(extractedPath, serverConfiguration.publicFolder)
         val dataFile = normalizedPath.toFile()
         httpObject.fileSystemPath = normalizedPath
@@ -45,19 +53,33 @@ class ContentHandler : AbstractHandler() {
         return true to httpObject
     }
 
-    private fun extractPathString(path: String): String {
+    internal fun extractPathString(path: String): String {
         val regex = "[^?]+".toRegex()
 
         return regex.find(path)?.value ?: path
     }
 
-    private fun normalizePath(path: String, publicFolder: String): Path {
+    internal fun isLegalPath(path: String): Boolean {
+        val pathTokens = path.trim('/').split("/")
+        var level = 0
+
+        for (token in pathTokens) {
+            if (token == "..") --level
+            else ++level
+
+            if (level < 0) return false
+        }
+
+        return true
+    }
+
+    internal fun normalizePath(path: String, publicFolder: String): Path {
         if (path.endsWith("/"))
             return Path.of(publicFolder, path + "index.html")
         return Path.of(publicFolder, path)
     }
 
-    private fun determineMimeType(fileName: String): MimeType {
+    internal fun determineMimeType(fileName: String): MimeType {
         val regex = "(\\.\\w+\$)".toRegex()
 
         return regex.find(fileName)?.let { match ->
