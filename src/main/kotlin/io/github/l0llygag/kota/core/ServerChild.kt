@@ -8,6 +8,7 @@ import io.github.l0llygag.kota.implementations.handlers.HttpMethodHandler
 import io.github.l0llygag.kota.implementations.handlers.HttpVersionHandler
 import io.github.l0llygag.kota.implementations.handlers.ResponseDateHandler
 import mu.KotlinLogging
+import java.io.BufferedOutputStream
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStream
@@ -44,7 +45,7 @@ class ServerChild(
         logger.info { "handling request from ${clientSocket.inetAddress.hostAddress}:${clientSocket.port}" }
 
         val reader = BufferedReader(InputStreamReader(clientSocket.getInputStream()))
-        val writer = clientSocket.getOutputStream()
+        val writer = BufferedOutputStream(clientSocket.getOutputStream())
         val startTime = Instant.now()
 
         var tmpLine: String?

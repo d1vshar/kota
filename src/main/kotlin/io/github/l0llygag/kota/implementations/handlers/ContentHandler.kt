@@ -22,7 +22,7 @@ class ContentHandler : AbstractHandler() {
         val extractedPath = extractPathString(httpObject.path)
         val isValid = isLegalPath(extractedPath)
 
-        if (isValid) {
+        if (!isValid) {
             httpObject.status = HttpStatus.BAD_REQUEST
             return false to httpObject
         }

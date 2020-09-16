@@ -2,6 +2,9 @@ package io.github.l0llygag.kota.core
 
 import mu.KotlinLogging
 import java.net.ServerSocket
+import java.util.concurrent.Executors
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
 /**
@@ -18,16 +21,19 @@ class Server(private val serverConfiguration: ServerConfiguration) {
 
     private val serverSocket = ServerSocket(serverConfiguration.port)
 
+    private val threadPoolExecutor = Executors.newFixedThreadPool(500)
+
     /**
      * Calling this function actually starts the server.
      */
     fun listen() {
+
         logger.info { "server listening on ${serverSocket.inetAddress.hostAddress}:${serverSocket.localPort}" }
         while (true) {
             val clientSocket = serverSocket.accept()
             logger.trace { "spawning thread for ${clientSocket.inetAddress.hostAddress}:${clientSocket.port}" }
 
-            thread {
+            threadPoolExecutor.submit {
                 ServerChild(clientSocket, serverConfiguration).run()
             }
         }
