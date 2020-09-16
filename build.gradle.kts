@@ -19,6 +19,7 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:1.8.0.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.0-M1")
+    testImplementation("io.mockk:mockk:1.10.0")
 }
 
 tasks {
@@ -37,7 +38,7 @@ tasks {
     named<ShadowJar>("shadowJar") {
         mergeServiceFiles()
         manifest {
-            attributes(mapOf("Main-Class" to "io.github.l0llygag.kota.ServerCliKt"))
+            attributes(mapOf("Main-Class" to "io.github.l0llygag.kota.implementations.ServerCliKt"))
         }
     }
 }
