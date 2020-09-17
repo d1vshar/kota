@@ -21,10 +21,17 @@ fun main(args: Array<String>) {
  * @property publicFolder The folder in which public files exist. This acts as root folder for server urls.
  */
 class ServerCli: CliktCommand() {
-    private val port: Int by option().int().default(8080)
-    private val publicFolder: String by option("--public").default("public/").validate {
-        require(File(it).exists()) { "Not a valid public folder! (make sure folder path ends with '/')." }
-    }
+    private val port: Int by option("-p", "--port",help = "Port to run the server on")
+        .int()
+        .default(8080)
+    private val publicFolder: String by option("-r", "--root", help = "Root folder for the server")
+        .default("public/")
+        .validate {
+            val f = File(it)
+            require(f.exists() && f.isDirectory) {
+                "Not a valid public folder! (make sure folder path ends with '/')"
+            }
+        }
 
     override fun run() {
         Server(
