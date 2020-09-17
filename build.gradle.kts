@@ -3,10 +3,11 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     kotlin("jvm") version "1.3.72"
     id("com.github.johnrengelman.shadow") version "5.2.0"
+    distribution
 }
 
 group = "io.github.l0llygag.kota"
-version = "0.1.2"
+version = "0.2.0"
 
 repositories {
     mavenCentral()
@@ -23,9 +24,6 @@ dependencies {
 }
 
 tasks {
-    build {
-        dependsOn("shadowJar")
-    }
     compileKotlin {
         kotlinOptions.jvmTarget = "1.8"
     }
@@ -34,6 +32,15 @@ tasks {
     }
     test {
         useJUnitPlatform()
+    }
+    distributions {
+        main {
+            distributionBaseName.set("kota")
+            contents {
+                from("src/dist/")
+                from(shadowJar)
+            }
+        }
     }
     named<ShadowJar>("shadowJar") {
         mergeServiceFiles()
