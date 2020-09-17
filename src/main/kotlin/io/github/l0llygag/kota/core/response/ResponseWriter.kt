@@ -35,15 +35,16 @@ class ResponseWriter(private val writer: OutputStream, private val httpObject: H
      */
     fun write() {
         val metaData = getRequestMeta()
+        val buf = ByteArray(8192)
         writer.write(metaData)
 
         httpObject.contentStream?.let {
             writer.write("\n".toByteArray())
 
-            var c = httpObject.contentStream?.read() ?: -1
+            var c = httpObject.contentStream?.read(buf) ?: -1
             while (c != -1) {
-                writer.write(c)
-                c = httpObject.contentStream?.read() ?: -1
+                writer.write(buf)
+                c = httpObject.contentStream?.read(buf) ?: -1
             }
         }
         httpObject.contentStream?.close()

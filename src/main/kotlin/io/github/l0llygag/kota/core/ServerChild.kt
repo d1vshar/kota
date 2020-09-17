@@ -51,38 +51,13 @@ class ServerChild(
         var tmpLine: String?
         var request = ""
 
-        outer@ do {
+        tmpLine = reader.readLine()
+        while (tmpLine != "") {
+            request += tmpLine+"\n"
             tmpLine = reader.readLine()
+        }
 
-            if (!tmpLine.isNullOrEmpty()) {
-                request += tmpLine + "\n"
-                inner@ while (true) {
-                    tmpLine = reader.readLine()
-
-                    if (tmpLine.isNullOrEmpty()) {
-                        request = request.trim()
-                        logger.trace {
-                            "request from ${clientSocket.inetAddress.hostAddress}:${clientSocket.port} = $request"
-                        }
-                        respond(request,writer)
-                        break@inner
-                    }
-
-                    request += tmpLine + "\n"
-                }
-            }
-
-            request = ""
-            if (Instant.now().minusSeconds(30) >= startTime) {
-                logger.info {
-                    "timeout on ${clientSocket.inetAddress.hostAddress}:${clientSocket.port}"
-                }
-                writer.close()
-                clientSocket.close()
-                break@outer
-            }
-        } while (true)
-
+        respond(request, writer)
     }
 
     /**

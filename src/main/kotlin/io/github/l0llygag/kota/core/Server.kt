@@ -21,7 +21,7 @@ class Server(private val serverConfiguration: ServerConfiguration) {
 
     private val serverSocket = ServerSocket(serverConfiguration.port)
 
-    private val threadPoolExecutor = Executors.newFixedThreadPool(500)
+    private val threadPoolExecutor = Executors.newFixedThreadPool(256)
 
     /**
      * Calling this function actually starts the server.
