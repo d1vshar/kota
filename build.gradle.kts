@@ -1,8 +1,8 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    kotlin("jvm") version "1.3.72"
-    id("com.github.johnrengelman.shadow") version "5.2.0"
+    kotlin("jvm") version "1.5.31"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
     distribution
 }
 
@@ -14,13 +14,13 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    implementation("com.github.ajalt:clikt:2.7.1")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.21")
+    implementation("com.github.ajalt:clikt:2.8.0")
     implementation("ch.qos.logback:logback-classic:1.3.0-alpha5")
-    implementation("io.github.microutils:kotlin-logging:1.8.0.1")
+    implementation("io.github.microutils:kotlin-logging:2.0.11")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.0-M1")
-    testImplementation("io.mockk:mockk:1.10.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.8.0")
+    testImplementation("io.mockk:mockk:1.12.0")
 }
 
 tasks {
