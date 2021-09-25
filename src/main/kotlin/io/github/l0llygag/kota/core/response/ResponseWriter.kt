@@ -21,7 +21,7 @@ class ResponseWriter(private val writer: OutputStream, private val httpObject: H
     private fun getRequestMeta(): ByteArray {
         val stringBuilder = StringBuilder()
 
-        stringBuilder.appendln("${HttpVersion.HTTP_1_1.version} ${httpObject.status.code} ${httpObject.status.description})")
+        stringBuilder.appendln("${HttpVersion.HTTP_1_1.version} ${httpObject.status.code} ${httpObject.status.description}")
 
         for (header in httpObject.headersOut.map)
             stringBuilder.appendln("${header.key.headersKeys}: ${header.value}")

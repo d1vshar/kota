@@ -6,8 +6,13 @@ import io.github.l0llygag.kota.core.HttpHeader
 import io.github.l0llygag.kota.core.HttpStatus
 import io.github.l0llygag.kota.core.MimeType
 import io.github.l0llygag.kota.core.handlers.AbstractHandler
+import java.io.File
+import java.net.URLDecoder
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import java.util.function.Predicate
+import kotlin.io.path.isDirectory
 
 /**
  * Handler for adding content and related headers to the response, or returning error if content not found.
@@ -29,6 +34,7 @@ class ContentHandler : AbstractHandler() {
 
         val normalizedPath = normalizePath(extractedPath, serverConfiguration.publicFolder)
         val dataFile = normalizedPath.toFile()
+
         httpObject.fileSystemPath = normalizedPath
         val notFound = !dataFile.exists()
 
@@ -56,7 +62,7 @@ class ContentHandler : AbstractHandler() {
     internal fun extractPathString(path: String): String {
         val regex = "[^?]+".toRegex()
 
-        return regex.find(path)?.value ?: path
+        return URLDecoder.decode(regex.find(path)?.value ?: path, StandardCharsets.UTF_8.name())
     }
 
     internal fun isLegalPath(path: String): Boolean {
@@ -74,9 +80,21 @@ class ContentHandler : AbstractHandler() {
     }
 
     internal fun normalizePath(path: String, publicFolder: String): Path {
-        if (path.endsWith("/"))
-            return Path.of(publicFolder, path + "index.html")
-        return Path.of(publicFolder, path)
+        val trimmedPath = path.trim('/')
+        if (Path.of(publicFolder, trimmedPath).isDirectory()) {
+            return Path.of(publicFolder, trimmedPath, "index.html")
+        } else {
+            if (hasExtension(trimmedPath)) {
+                return Path.of(publicFolder, trimmedPath)
+            }
+            return Path.of(publicFolder, "$trimmedPath.html")
+        }
+    }
+
+    private fun hasExtension(path: String): Boolean {
+        val dot = path.lastIndexOf('.');
+        if (dot > 0) return true;
+        return false;
     }
 
     internal fun determineMimeType(fileName: String): MimeType {

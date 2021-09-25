@@ -48,7 +48,7 @@ class ServerChild(
         val writer = BufferedOutputStream(clientSocket.getOutputStream())
         val startTime = Instant.now()
 
-        var tmpLine: String?
+        var tmpLine: String
         var request = ""
 
         tmpLine = reader.readLine()
